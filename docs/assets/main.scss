@@ -1,0 +1,35 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+$base-font-family: "EB Garamond", serif;
+$base-line-height: 1.3;
+
+@import "minima";
+
+// Override stuff in the minima theme. I'm sure I'll end up writing
+// my own CSS, but this fine for prototyping.
+
+.site-title {
+    letter-spacing: 0;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.post-title {
+    letter-spacing: 0;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+pre, code {
+    background-color: $background-color;
+    font-family: Inconsolata;
+    border: 0;
+}
+
+code {
+    padding: 0;
+}
