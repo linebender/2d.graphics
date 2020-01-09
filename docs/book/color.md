@@ -14,18 +14,24 @@ title: Color
 
 * [Colour Appearance Issues in Digital Video, HD/UHD, and D‑cinema](https://poynton.ca/PDFs/Poynton-2018-PhD.pdf). This is Poynton's 2018 PhD, with very rich information on modern digital video formats.
 
-* [color vision](https://handprint.com/LS/CVS/color.html). A comprehensive resource, arguably the best on the web.
+* [color vision](https://handprint.com/LS/CVS/color.html) by Bruce MacEvoy. A comprehensive resource, arguably the best on the web.
 
 * The [Wikipedia article on sRGB](https://en.wikipedia.org/wiki/SRGB) is ok and links to other resources.
 
 Color science has been a mature topic for some time. Here are a number of books on the topic, sorted by date:
 
-* [A Field Guide to Digital Color](https://www.amazon.com/dp/1568811616), 2003. (Also see [A Survey of Color for Computer Graphics](http://graphics.stanford.edu/courses/cs448b-02-spring/04cdrom.pdf), SIGGRAPH 2001 course notes)
+* [Color in Business, Science, and Industry](https://www.amazon.com/dp/0471452122/), Judd and Wyszecki, 1975.
 
-* [The Reproduction of Colour](https://www.amazon.com/dp/0470024259), 2004.
+* [Color Science: Concepts and Methods, Quantitative Data and Formulae](https://www.amazon.com/dp/0471399183/), Wyszecki and Stiles, 2000.
 
-* [Colorimetry: Understanding the CIE System](https://www.amazon.com/dp/0470049049), 2007.
+* [A Field Guide to Digital Color](https://www.amazon.com/dp/1568811616), Maureen Stone, 2003. (Also see [A Survey of Color for Computer Graphics](http://graphics.stanford.edu/courses/cs448b-02-spring/04cdrom.pdf), SIGGRAPH 2001 course notes)
 
-* [Color: An Introduction to Practice and Principles](https://www.amazon.com/dp/1118173848), 2012.
+* [The Reproduction of Colour](https://www.amazon.com/dp/0470024259), RWG Hunt, 2004.
 
-* [Billmeyer and Saltzman's Principles of Color Technology](https://www.amazon.com/dp/1119367220), 2019.
+* [Colorimetry: Understanding the CIE System](https://www.amazon.com/dp/0470049049), Janos Schanda (ed), 2007.
+
+* [Color: An Introduction to Practice and Principles](https://www.amazon.com/dp/1118173848), Rolf Kuehni, 2012.
+
+* [Color Appearance Models](https://www.amazon.com/dp/1119967031), Mark Fairchild, 2013.
+
+* [Billmeyer and Saltzman's Principles of Color Technology](https://www.amazon.com/dp/1119367220), Roy Berns, 2019.
