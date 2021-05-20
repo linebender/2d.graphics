@@ -6,7 +6,9 @@ layout: default
 title: Contents
 ---
 * [Introduction](intro.html)
+
 * [Color](color.html)
+
 * [Images](images.html)
 
 * [Shapes](shapes.html)
