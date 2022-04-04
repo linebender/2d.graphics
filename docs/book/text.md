@@ -10,3 +10,7 @@ Hoo boy!
 * Fonts
   + This is probably a separate chapter
 * So much stuff
+
+## Resources
+
+* [Text Rendering Hates You]: https://gankra.github.io/blah/text-hates-you/

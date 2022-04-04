@@ -138,6 +138,8 @@ Note that determining the parameter $$t$$ for the start and end of each dash is 
   - Dependent on arclength computation
 * [Polar Stroking]
   - Also see [Converting stroked primitives to filled primitives]. Both deal with cusps and edge cases.
+* [Shader-Based Antialiased, Dashed, Stroked Polylines]
 
 [Polar Stroking]: https://arxiv.org/abs/2007.00308
 [Converting stroked primitives to filled primitives]: http://w3.impa.br/~diego/projects/Neh20/
+[Shader-Based Antialiased, Dashed, Stroked Polylines]: https://jcgt.org/published/0002/02/08/paper.pdf
