@@ -105,14 +105,17 @@ In that case, the winding number contribution is $$\text{signum}(y_0 - y_1)$$.
 The technique generalizes to curves. The curve segment is split into y-monotonic subsegments, then for each subsegment the same technique is used, solving the curve for $$x$$ given $$y$$.
 
 * [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo/)
-
 * Winding number
   - Mathematical interpretation
   - Even/odd and nonzero winding number rules
 
 ## Stroking
 
-While filling requires closed paths, stroking works for open paths as well.
+The two main ways that paths become images are filling, discussed above, and stroking. Informally, stroking can be understood as sweeping a pen, with some thickness, along the stroke. Unlike filling, which is well defined (winding number rule is the only relevant parameter other than the path itself), there is considerable variation in stroking, both in *stroke style* and in variations among implementations. On the other hand, while filling requires closed paths, stroking works for open paths as well.
+
+There is no single clear mathematical definition of stroking. Existing systems tend to be defined by their implementations, though there are efforts to define it more systematically. There are (at least) three relevant definitions: Minkowski sum, swept line, and offset curve.
+
+### Minkowski sum
 
 The mathematically simplest form of stroking can be expressed as the Minkowski sum of a disc with the set of points on the path. Expanding that out, the predicate can be written:
 
@@ -120,9 +123,53 @@ $$
 \exists\, i, t: |\text{path}[i](t) - \boldsymbol{x}| < r
 $$
 
-This style of stroking is certainly simplest from the mathematical perspective, but is not generally the default or the most common.
+This style of stroking is certainly simplest from the mathematical perspective, but is not generally the default or the most common. It results in strokes with round ends, and round joins at angled corners, the outline defined by circular arcs.
 
-Stroking can be computed analytically as a path to path transformation
+![Example of round line styles](../assets/round.svg)
+
+One advantage of the Minkowski sum formuation is that it generalizes to other pen shapes than a circle. For example, affine transformation of a stroked outline is equivalent to stroking the affine transformed source path with an elliptical pen.
+
+### Stroke styles
+
+In the base set, caps are round, butt, and square, and joins are round, miter, and bevel. Traditionally, there is also "miter limit" setting, so that if the angle is more acute than the limit, the join is bevel, otherwise miter.
+
+TODO: show examples. In the meantime, [MDN tutorial](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes) is a reasonable source.
+
+The [SVG 2 draft spec] proposes additional styles, but these are not in widespread use.
+
+### Swept line
+
+The main limitation of the Minkowski sum approach is that it can only express round ends and joins, while designers prefer a wider range of styles. These other styles are generally expressed as the stroke of each continuous path segment, plus additional elements applied to the ends and joins at corners.
+
+The stroke of a single continuous curve segment is defined by sweeping a line along the path, centered on that path, and normal to it.
+
+In general, when round caps and joins are specified, the swept line definition is equivalent to Minkowski sum, but as [Nehab 2020] points out, there is one edge case, namely a cubic Bézier containing a cusp, where the swept line definition gives a flat cap.
+
+When paths have extremes of curvature, the outline can have complex shapes, defined in [Nehab 2020] as evolutes. Computing these shapes is nontrivial.
+
+The [SVG 2 draft spec] is defined in terms of swept line. That said, it is rare for implementations to rigorously follow this spec.
+
+### Offset curves
+
+A third definition is offset curves, otherwise known as parallel curves. Swept along a continuous curve, a line normal to that curve traces a parallel curve offset by the half-width of the line in either direction. Joins can be defined by stitching together the endpoints of these parallel curves, with additional path segments for the different join types (TODO: be more precise). Butt caps can be defined as drawing line segments from the endpoints.
+
+The main motivation for this definition is to enable performant implementations. Efficient algorithms for parallel curve are known, but not so much for the evolutes as defined in [Nehab 2020].
+
+For paths that do not have extremes of curvature (relative to the line width), the results are the same as the swept line definition.
+
+When authoring vector content, it is best not to depend on handling of these edge cases, as implementations may vary. One way to achieve robustness is to specify round joins and caps. Another is to avoid excessive curvature, or, failing that, perform stroke to fill expansion during authoring.
+
+TODO: another challenge in computing offset curves is the presence of cusps.
+
+At the time of writing, the popular Skia library renders strokes consistent with the offset curve definition.
+
+#### Computation of offset curves
+
+There is a large literature on computing offset curves, as there are applications in computer aided design and manufacturing, path planning in robotics, and other domains. Yet, quality implementions are elusive.
+
+[Tiller and Hanson] is commonly cited and frequently implemented, but its results for cubic Béziers are poor. In fact, they have only $$O(n^2)$$ scaling. The results for quadratic Béziers are better, with $$O(n^4)$$ scaling, and discerning implementors (including [Nehab 2020]) often use the quadratic version.
+
+A new algorithm based on quartic curve fitting is given in [Parallel curves of cubic Béziers]. This algorithm as $$O(n^6)$$ scaling, good robustness, and good performance. It may not be as suitable for implementation on GPU, as it relies on recursive subdivision for finding cusps, and the quartic solver may be difficult to adapt to 32 bit floating point precision while retaining good numerical robustness. Another choice is to use [Euler spirals][Cleaner parallel curves with Euler spirals].
 
 ### Dashing
 
@@ -132,14 +179,19 @@ Note that determining the parameter $$t$$ for the start and end of each dash is 
 
 <!-- If we're going to use this pseudo-programming notation, do the same for winding number / filling. Ie write out the sum -->
 
-* Cap and join styles
-  - With round cap & join, equivalent to Minkowski sum with disk
-* Dashing
-  - Dependent on arclength computation
-* [Polar Stroking]
-  - Also see [Converting stroked primitives to filled primitives]. Both deal with cusps and edge cases.
+## References
+
+* Nehab 2020: [Converting stroked primitives to filled primitives][Nehab 2020]
+* Kilgard 2020: [Polar Stroking][Kilgard 2020]
+* [Parallel curves of cubic Béziers]
+* [Cleaner parallel curves with Euler spirals]
+* Tiller and Hanson: [Offsets of Two-Dimensional Profiles][Tiller and Hanson]
 * [Shader-Based Antialiased, Dashed, Stroked Polylines]
 
-[Polar Stroking]: https://arxiv.org/abs/2007.00308
-[Converting stroked primitives to filled primitives]: http://w3.impa.br/~diego/projects/Neh20/
+[Kilgard 2020]: https://arxiv.org/abs/2007.00308
+[Nehab 2020]: http://w3.impa.br/~diego/projects/Neh20/
 [Shader-Based Antialiased, Dashed, Stroked Polylines]: https://jcgt.org/published/0002/02/08/paper.pdf
+[SVG 2 draft spec]: https://www.w3.org/TR/SVG2/
+[Tiller and Hanson]: https://ieeexplore.ieee.org/iel5/38/4055906/04055919
+[Cleaner parallel curves with Euler spirals]: https://raphlinus.github.io/curves/2021/02/19/parallel-curves.html
+[Parallel curves of cubic Béziers]: https://raphlinus.github.io/curves/2022/09/09/parallel-beziers.html
